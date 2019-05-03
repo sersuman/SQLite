@@ -2,8 +2,14 @@ package helper;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.example.sqlite.Word;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyHelper extends SQLiteOpenHelper {
     private static final String databaseName = "User";
@@ -40,4 +46,17 @@ public class MyHelper extends SQLiteOpenHelper {
         id = db.insert(tblUser,null, contentValues);
         return id;
     }
+    public List<Word> GetAllWords(SQLiteDatabase db){
+        List<Word> userList = new ArrayList<>();
+        String[] columns = (UserId, Username, Password);
+        Cursor cursor = db.query(tblUser, columns, null,null,null,null,null);
+
+        if (cursor.getCount()>0){
+            while (cursor.moveToNext()){
+                userList.add(new Word(cursor.getInt(0), cursor.getString(1),cursor.getString(2)));
+            }
+        }
+        return userList;
+    }
+
 }
